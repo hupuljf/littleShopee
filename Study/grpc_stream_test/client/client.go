@@ -1,10 +1,10 @@
 package main
 
 import (
-	"RunStudyGin/grpc_stream_test"
 	"context"
 	"fmt"
 	"google.golang.org/grpc"
+	"littleShopee/Study/grpc_stream_test"
 	"sync"
 	"time"
 )

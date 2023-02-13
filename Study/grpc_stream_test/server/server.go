@@ -1,8 +1,8 @@
 package main
 
 import (
-	"RunStudyGin/grpc_stream_test"
 	"fmt"
+	"littleShopee/Study/grpc_stream_test"
 	"net"
 	"sync"
 	"time"
