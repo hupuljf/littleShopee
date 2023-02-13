@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+//流模式
+service Hello{
+    rpc HelloServerStream(HelloRequest) returns (stream HelloResponse);//服务端流模式
+    rpc HelloClientStream(stream HelloRequest) returns (HelloResponse);//客户端流模式
+    rpc HelloEachStream(stream HelloRequest) returns (stream HelloResponse);//
+}
+
+
+message HelloRequest {
+    string name = 1;//1是编号不是值
+    int32 age = 2;
+    repeated string courses = 3;//repeated 相当于数组
+}
+
+message HelloResponse{
+   string reply = 1;
+}
+
+option go_package = ".;grpc_stream_test";
