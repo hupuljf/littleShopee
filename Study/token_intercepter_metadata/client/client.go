@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 	"littleShopee/Study/proto_test"
 	"time"
 )
@@ -35,6 +36,13 @@ func main() {
 		start := time.Now()
 		//客户端建立连接后发起请求之前做的一些事情写在这儿
 		//这个opts是调用前的选择
+		//引入metadata 相当于客户端的请求带header
+		md := metadata.New(map[string]string{
+			"appid":  "1001",
+			"appkey": "1001key",
+		})
+		//将metadata带入ctx
+		ctx = metadata.NewOutgoingContext(ctx, md)
 		err := invoker(ctx, method, req, reply, cc, opts...)
 		fmt.Printf("耗时：%s\n", time.Since(start))
 		return err

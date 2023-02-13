@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 	"net"
 
 	"littleShopee/Study/proto_test"
@@ -15,9 +17,6 @@ type Server struct{}
 
 func (s *Server) Hello(ctx context.Context, request *proto_test.HelloRequest) (*proto_test.Response, error) {
 	//ctx.Err()
-	if md, ok := metadata.FromIncomingContext(ctx); ok {
-		fmt.Println(md["token"])
-	}
 
 	return &proto_test.Response{
 		Reply: "Mother Fucker! " + (*request).Name,
@@ -40,6 +39,25 @@ func main() {
 	interceptor := func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
 		fmt.Println("接收到了一个新的请求，处理一些在这个请求之前的事情")
 		//处理请求直接在拦截器里面做了
+		md, ok := metadata.FromIncomingContext(ctx)
+		if !ok {
+			return resp, status.Error(codes.Unauthenticated, "取不到metadata 被拦截")
+		}
+		var (
+			appid  string
+			appkey string
+		)
+		if va1, ok := md["appid"]; ok {
+			appid = va1[0]
+		}
+		if va2, ok := md["appkey"]; ok {
+			appkey = va2[0]
+		}
+		fmt.Println(appid, appkey)
+		if appid != "1001" || appkey != "1001key" {
+			return resp, status.Error(codes.Unauthenticated, "用户或密码不对 被拦截")
+		}
+
 		res, err := handler(ctx, req)
 		fmt.Println("请求已经完成")
 		return res, err
