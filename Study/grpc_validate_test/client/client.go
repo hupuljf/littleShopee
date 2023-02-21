@@ -20,7 +20,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
 	defer conn.Close()
 
 	var c = proto.NewGreeterClient(conn) //rsp, _ := c.Search(context.Background(), &empty.Empty{})
