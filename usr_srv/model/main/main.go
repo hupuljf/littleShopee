@@ -11,7 +11,7 @@ import (
 
 func main() {
 	IP := flag.String("ip:", "0.0.0.0", "可以输入ip地址")
-	Port := flag.Int("Port:", 8888, "可以输入端口号")
+	Port := flag.Int("Port:", 50051, "可以输入端口号")
 	flag.Parse()
 	fmt.Println(*IP)
 	server := grpc.NewServer()
