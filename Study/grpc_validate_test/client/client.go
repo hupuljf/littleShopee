@@ -1,9 +1,15 @@
 package main
 
 import (
+<<<<<<< Updated upstream
 	"context"
 	"fmt"
 	"littleShopee/Study/grpc_validate_test/proto"
+=======
+	"OldPackageTest/grpc_validate_test/proto"
+	"context"
+	"fmt"
+>>>>>>> Stashed changes
 
 	"google.golang.org/grpc"
 )
@@ -20,6 +26,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+<<<<<<< Updated upstream
 	defer conn.Close()
 
 	var c = proto.NewGreeterClient(conn) //rsp, _ := c.Search(context.Background(), &empty.Empty{})
@@ -27,6 +34,17 @@ func main() {
 		Id:     1000,
 		Email:  "bo",
 		Mobile: "188888888",
+=======
+
+	defer conn.Close()
+
+	c := proto.NewGreeterClient(conn)
+	//rsp, _ := c.Search(context.Background(), &empty.Empty{})
+	rsp, err := c.SayHello(context.Background(), &proto.Person{
+		Id:     1000,
+		Email:  "bobby@imooc.com",
+		Mobile: "18888888888",
+>>>>>>> Stashed changes
 	})
 	if err != nil {
 		panic(err)
