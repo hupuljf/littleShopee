@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"littleShopee/usr_srv/proto"
+	"strconv"
 
 	"google.golang.org/grpc"
 )
@@ -13,10 +14,8 @@ var conn *grpc.ClientConn
 
 func Init() {
 	var err error
-	//建立连接 dial ip端口
-	conn, err = grpc.Dial("0.0.0.0:8888", grpc.WithInsecure())
+	conn, err = grpc.Dial("127.0.0.1:50051", grpc.WithInsecure())
 	if err != nil {
-		fmt.Println("jjjjjjjjjjjjj")
 		panic(err)
 	}
 	userClient = proto.NewUserClient(conn)
@@ -48,8 +47,8 @@ func TestCreateUser() {
 	for i := 0; i < 10; i++ {
 		rsp, err := userClient.CreateUser(context.Background(), &proto.CreateUserInfo{
 			NickName: fmt.Sprintf("bobby%d", i),
-			Mobile:   fmt.Sprintf("187822%d", i),
-			PassWord: "admin123",
+			Mobile:   fmt.Sprintf("1371949551%d", i),
+			PassWord: "admin123" + strconv.Itoa(i),
 		})
 		if err != nil {
 			panic(err)
@@ -59,19 +58,30 @@ func TestCreateUser() {
 }
 
 func main() {
-	userList := new(proto.UserListResponse)
-	(*userList).Total = int32(999)
-	fmt.Println(userList.Total)
+	//userList := new(proto.UserListResponse)
+	//(*userList).Total = int32(999)
+	//fmt.Println(userList.Total)
 	var err error
 	//建立连接 dial ip端口
-	conn, err = grpc.Dial("0.0.0.0:8888", grpc.WithInsecure())
+	conn, err = grpc.Dial("0.0.0.0:50051", grpc.WithInsecure())
 	defer conn.Close()
 	if err != nil {
 		fmt.Println("jjjjjjjjjjjjj")
 		panic(err)
 	}
 	userClient = proto.NewUserClient(conn)
-	//TestCreateUser()
-	TestGetUserList()
+	for i := 0; i < 10; i++ {
+		rsp, err := userClient.CreateUser(context.Background(), &proto.CreateUserInfo{
+			NickName: fmt.Sprintf("bobby%d", i),
+			Mobile:   fmt.Sprintf("1371949551%d", i),
+			PassWord: "admin123" + strconv.Itoa(i),
+		})
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(rsp.Id)
+	}
+
+	//TestGetUserList()
 
 }
