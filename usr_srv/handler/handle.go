@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/anaskhan96/go-password-encoder"
 	"github.com/golang/protobuf/ptypes/empty"
+	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
@@ -61,6 +62,7 @@ func (server *UserServer) GetUserList(ctx context.Context, req *proto.PageInfo) 
 	var users []model.User
 	//users := make([]model.User, 0)
 	//拿到所有users列表
+	zap.S().Info("获取用户列表")
 	result := global.DB.Find(&users)
 	if result.Error != nil {
 		fmt.Println("错在哪儿", result.Error)

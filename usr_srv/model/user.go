@@ -23,3 +23,8 @@ type User struct {
 	Gender   string     `gorm:"column:gender;default:male;type:varchar(6) comment 'female表示女, male表示男'"`
 	Role     int        `gorm:"column:role;default:1;type:int comment '1表示普通用户, 2表示管理员'"`
 }
+
+func (User) TableName() string {
+	return "users"
+
+}

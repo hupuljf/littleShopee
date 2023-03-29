@@ -4,12 +4,16 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"littleShopee/usr_srv/config"
 	"log"
 	"os"
 	"time"
 )
 
-var DB *gorm.DB
+var (
+	DB           *gorm.DB
+	ServerConfig = &config.ServerConfig{}
+)
 
 func init() {
 	dsn := "root:8971841xm@tcp(localhost:3306)/shop_usr_srv?charset=utf8mb4&parseTime=True&loc=Local"
