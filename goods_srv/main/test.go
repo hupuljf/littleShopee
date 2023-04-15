@@ -2,8 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/emptypb"
+	"littleShopee/goods_srv/model"
 	"littleShopee/goods_srv/proto"
 )
 
@@ -31,6 +34,46 @@ func TestGetUserList() {
 	fmt.Println(rsp)
 }
 
+func TestCategory() {
+	rsp, err := userClient.GetAllCategorysList(context.Background(), &emptypb.Empty{})
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+	b := []byte(rsp.JsonData)
+	var categorys []model.Category
+	json.Unmarshal(b, &categorys)
+	fmt.Println(rsp)
+	fmt.Println(categorys[0].SubCategory[0])
+}
+
+func TestCategoryBrandList() {
+	rsp, err := userClient.CategoryBrandList(context.Background(), &proto.CategoryBrandFilterRequest{
+		PagePerNums: 10,
+		Pages:       1,
+	})
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+
+	fmt.Println(rsp.Data[0])
+
+}
+func TestBrandList() {
+	rsp, err := userClient.BrandList(context.Background(), &proto.BrandFilterRequest{
+		PagePerNums: 10,
+		Pages:       1,
+	})
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+
+	fmt.Println(rsp)
+
+}
+
 //func TestCreateUser() {
 //	for i := 0; i < 10; i++ {
 //		rsp, err := userClient.CreateUser(context.Background(), &proto.CreateUserInfo{
@@ -44,6 +87,20 @@ func TestGetUserList() {
 //		fmt.Println(rsp.Id)
 //	}
 //}
+
+func TestGoodsList() {
+	rsp, err := userClient.GoodsList(context.Background(), &proto.GoodsFilterRequest{
+		PagePerNums: 10,
+		Pages:       1,
+	})
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+
+	fmt.Println(rsp.Data[0])
+
+}
 
 func main() {
 	//userList := new(proto.UserListResponse)
@@ -69,7 +126,5 @@ func main() {
 	//	}
 	//	fmt.Println(rsp.Id)
 	//}
-
-	TestGetUserList()
-
+	TestGoodsList()
 }

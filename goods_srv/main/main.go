@@ -34,5 +34,8 @@ func main() {
 	proto.RegisterGoodsServer(server, &handler.GoodsServer{})
 	lis, _ := net.Listen("tcp", fmt.Sprintf("%s:%d", *IP, *Port))
 	server.Serve(lis)
-
+	//mp := map[string]string{} //给分配空间的集合的写法
+	//mp := make(map[string]string, 0)
+	//mp["www"] = "hehe"
+	//fmt.Println(mp["www"])
 }
