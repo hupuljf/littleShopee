@@ -24,3 +24,28 @@ func (s *safeResource) Get(key string) string {
 		return "NAN"
 	}
 }
+
+//泛型的使用 k 是可比较类型 V 是任意一个类型
+type SafeMap[K comparable, V any] struct {
+	values map[K]V
+	lock   sync.RWMutex
+}
+
+//这个k已经存在的话 返回对应的值 loaded=true
+//不存在则存 loaded=false
+func (s *SafeMap[K, V]) LoadOrStore(k K, v V) (V, bool) {
+	s.lock.RLock()
+	oldVal, ok := s.values[k]
+	s.lock.RUnlock() //不能用defer defer是return后执行的 如果没有return 后面获取不到写锁
+	if ok {
+		return oldVal, true
+	}
+	s.lock.Lock()
+	oldVal, ok = s.values[k] //double check
+	if ok {
+		return oldVal, true
+	}
+	defer s.lock.Unlock()
+	s.values[k] = v
+	return v, false
+}
