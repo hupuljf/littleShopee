@@ -1,6 +1,7 @@
 package main
 
 import (
+<<<<<<< Updated upstream
 	"flag"
 	"fmt"
 	"os"
@@ -91,6 +92,51 @@ func main() {
 	if err = client.Agent().ServiceDeregister(serviceID); err != nil {
 		zap.S().Info("注销失败")
 		panic(err)
+=======
+	"fmt"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"log"
+	"os"
+	"time"
+)
+
+var db *gorm.DB
+
+func initDB() {
+	dsn := "root:8971841xm@tcp(localhost:3306)/learn?charset=utf8mb4&parseTime=True&loc=Local"
+	newLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logger.Config{
+			SlowThreshold: time.Second, // 慢 SQL 阈值
+			LogLevel:      logger.Info, // Log level
+			Colorful:      true,        // 禁用彩色打印
+		},
+	)
+	db, _ = gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: newLogger,
+	})
+}
+
+type user struct {
+	Mobile   string     `gorm:"index:idx_mobile;unique;type:varchar(100);not null"`
+	Password string     `gorm:"type:varchar(100);not null"`
+	NickName string     `gorm:"type:varchar(20)"`
+	Birthday *time.Time `gorm:"type:datetime"`
+	Gender   string     `gorm:"column:gender;default:male;type:varchar(6) comment 'female表示女, male表示男'"`
+	Goods    int        `gorm:"column:goods;index"`
+	Count    int        `gorm:"column:count;default:1;type:int comment '1表示普通用户, 2表示管理员'"`
+}
+
+func main() {
+	a := []int{1, 2, 3}
+	b := []int{}
+	for _, w := range b {
+		for _, x := range a {
+			fmt.Println(w, x)
+		}
+>>>>>>> Stashed changes
 	}
 
 }
